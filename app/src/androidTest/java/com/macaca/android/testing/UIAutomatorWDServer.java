@@ -25,17 +25,17 @@ public class UIAutomatorWDServer extends RouterNanoHTTPD {
         //addRoute(sessionRoutePrefix + "/", Methods.GET, HomeController.home);
 
         //SessionRouter
-        addRoute("/wd/hub/session", Methods.POST, SessionController.createSession);
-        addRoute("/wd/hub/sessions", Methods.GET, SessionController.getSessions);
-        addRoute("/wd/hub/session/:sessionId", Methods.DELETE, SessionController.delSession);
+        //addRoute("/wd/hub/session", Methods.POST, SessionController.createSession);
+        //addRoute("/wd/hub/sessions", Methods.GET, SessionController.getSessions);
+        //addRoute("/wd/hub/session/:sessionId", Methods.DELETE, SessionController.delSession);
 
         //Window Router
         addRoute(sessionRoutePrefix + "/window_handle", Methods.GET, WindowController.getWindow);
         addRoute(sessionRoutePrefix + "/window_handles", Methods.GET, WindowController.getWindows);
         addRoute(sessionRoutePrefix + "/window", Methods.POST, WindowController.setWindow);
         addRoute(sessionRoutePrefix + "/window", Methods.DELETE, WindowController.deleteWindow);
-        addRoute(sessionRoutePrefix + "/window/:windowHandle/size", Methods.GET, WindowController.getWindowSize);
         addRoute(sessionRoutePrefix + "/window/:windowHandle/size", Methods.POST, WindowController.setWindowSize);
+        addRoute(sessionRoutePrefix + "/window/:windowHandle/size", Methods.GET, WindowController.getWindowSize);
         addRoute(sessionRoutePrefix + "/window/:windowHandle/maximize", Methods.POST, WindowController.maximize);
         addRoute(sessionRoutePrefix + "/frame", Methods.POST, WindowController.setFrame);
 
