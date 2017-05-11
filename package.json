@@ -1,0 +1,38 @@
+{
+  "name": "uiautomatorwd",
+  "version": "1.0.15",
+  "description": "Node.js wrapper for UIAutomator2",
+  "keywords": [
+    "uiautomator",
+    "Node.js"
+  ],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/macacajs/uiautomatorwd.git"
+  },
+  "dependencies": {
+    "gradle": "^1.0.1",
+    "macaca-adb": "~1.0.2",
+    "request": "^2.81.0",
+    "xlogger": "~1.0.0",
+    "xutil": "~1.0.1"
+  },
+  "devDependencies": {
+    "co-mocha": "~1.1.2",
+    "istanbul": "*",
+    "jshint": "*",
+    "pre-commit": "1.1.1",
+    "should": "~8.0.2"
+  },
+  "scripts": {
+    "test": "make test",
+    "jshint": "make jshint",
+    "install": "node ./scripts/build.js"
+  },
+  "pre-commit": [
+    "jshint"
+  ],
+  "homepage": "https://github.com/macacajs/uiautomatorwd",
+  "license": "MIT"
+}
