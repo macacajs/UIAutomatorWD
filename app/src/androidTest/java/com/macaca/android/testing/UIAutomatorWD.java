@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class UIAutomatorWD {
     @Test
-    public void useAppContext() throws Exception {
+    public void MacacaTestRunner() throws Exception {
         Bundle args = InstrumentationRegistry.getArguments();
 
         int port = 9001;

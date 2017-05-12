@@ -14,7 +14,6 @@ import com.macaca.android.testing.server.xmlUtils.NodeInfoList;
 import com.macaca.android.testing.server.xmlUtils.UiAutomatorBridge;
 import com.macaca.android.testing.server.xmlUtils.XPathSelector;
 import com.macaca.android.testing.server.xmlUtils.MUiDevice;
-import com.macaca.android.testing.server.charsetUtils.CharsetProvider;
 
 import android.graphics.Rect;
 import android.support.test.uiautomator.By;
@@ -27,7 +26,6 @@ import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
 
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -86,26 +84,26 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
                     session.parseBody(body);
                     String value = body.get("postData");
                     JSONObject postData = JSON.parseObject(value);
-                    String strategy = (String)postData.get("using");
+                    String strategy = (String) postData.get("using");
                     String text = (String) postData.get("value");
                     strategy = strategy.trim().replace(" ", "_").toUpperCase();
-                        if (strategy.equals("XPATH")) {
-                            try {
-                                UiObject2 uiObject2 = getXPathUiObject(text);
-                                Element element = getElements().addElement(uiObject2);
-                                result.put("ELEMENT", element.getId());
-                            } catch (Exception e) {
-                                return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.NoSuchElement, sessionId).toString());
-                            }
-                        } else {
-                            try {
-                                BySelector selector = getSelector(strategy, text);
-                                result = getOneElement(selector);
-                            } catch (Exception e) {
-                                return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.InvalidSelector, sessionId).toString());
-                            }
+                    if (strategy.equals("XPATH")) {
+                        try {
+                            UiObject2 uiObject2 = getXPathUiObject(text);
+                            Element element = getElements().addElement(uiObject2);
+                            result.put("ELEMENT", element.getId());
+                        } catch (Exception e) {
+                            return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.NoSuchElement, sessionId).toString());
                         }
-                        return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
+                    } else {
+                        try {
+                            BySelector selector = getSelector(strategy, text);
+                            result = getOneElement(selector);
+                        } catch (Exception e) {
+                            return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.InvalidSelector, sessionId).toString());
+                        }
+                    }
+                    return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
 
                 } catch (Exception e) {
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.UnknownError, sessionId).toString());
@@ -123,15 +121,21 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
                     session.parseBody(body);
                     String value = body.get("postData");
                     JSONObject postData = JSON.parseObject(value);
-                    String strategy = (String)postData.get("using");
+                    String strategy = (String) postData.get("using");
                     String text = (String) postData.get("value");
                     strategy = strategy.trim().replace(" ", "_").toUpperCase();
-                    try {
-                        BySelector selector = getSelector(strategy, text);
-                        result = getMultiElements(selector);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.InvalidSelector, sessionId).toString());
+                    if (strategy.equals("XPATH")) {
+                        List<UiObject2> uiObject2s = getXPathUiObjects(text);
+                        List<Element> elements = getElements().addElements(uiObject2s);
+                        result = elementsToJSONArray(elements);
+                    } else {
+                        try {
+                            BySelector selector = getSelector(strategy, text);
+                            result = getMultiElements(selector);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.InvalidSelector, sessionId).toString());
+                        }
                     }
                 } catch (Exception e) {
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.UnknownError, sessionId).toString());
@@ -145,21 +149,17 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
             public NanoHTTPD.Response get(RouterNanoHTTPD.UriResource uriResource, Map<String, String> urlParams, NanoHTTPD.IHTTPSession session) {
                 String sessionId = urlParams.get("sessionId");
                 String elementId = urlParams.get("elementId");
-                Charset UTF7 = new CharsetProvider().charsetForName("X-MODIFIED-UTF-7");
-                Charset ASCII = Charset.forName("US-ASCII");
                 Map<String, String> body = new HashMap<String, String>();
                 JSONObject result = null;
                 try {
                     session.parseBody(body);
                     String postData = body.get("postData");
                     JSONObject jsonObj = JSON.parseObject(postData);
-                    JSONArray values = (JSONArray)jsonObj.get("value");
-                    for (Iterator iterator = values.iterator(); iterator.hasNext();) {
+                    JSONArray values = (JSONArray) jsonObj.get("value");
+                    for (Iterator iterator = values.iterator(); iterator.hasNext(); ) {
                         String value = (String) iterator.next();
-                        byte[] encoded = (value).getBytes(UTF7);
-                        String str = new String(encoded, ASCII);
                         Element element = getElements().getElement(elementId);
-                        element.setText(str);
+                        element.setText(value);
                     }
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
                 } catch (final UiObjectNotFoundException e) {
@@ -297,7 +297,7 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
         return NanoHTTPD.Response.Status.OK;
     }
 
-    private static  JSONObject getOneElement(final BySelector sel) throws Exception {
+    private static JSONObject getOneElement(final BySelector sel) throws Exception {
         final JSONObject res = new JSONObject();
         final Element element = getElements().getElement(sel);
         res.put("ELEMENT", element.getId());
@@ -316,9 +316,17 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
     private static UiObject2 getXPathUiObject(String expression) throws Exception {
         final NodeInfoList nodeList = XPathSelector.getNodesList(expression);
         if (nodeList.size() == 0) {
-            throw new Exception("xpatherror");
+            throw new Exception(Status.XPathLookupError.getStatusDes());
         }
         return MUiDevice.getInstance().findObject(nodeList);
+    }
+
+    private static List<UiObject2> getXPathUiObjects(String expression) throws Exception {
+        final NodeInfoList nodeList = XPathSelector.getNodesList(expression);
+        if (nodeList.size() == 0) {
+            throw new Exception(Status.XPathLookupError.getStatusDes());
+        }
+        return MUiDevice.getInstance().findObjects(nodeList);
     }
 
     private static BySelector getSelector(String strategy, String text) throws Exception {
@@ -382,7 +390,7 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
         while (!el.getText().isEmpty() && !tempTextHolder.equalsIgnoreCase(el.getText())) {
             el.click();
 
-            for (int key : new int[] { KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_FORWARD_DEL }) {
+            for (int key : new int[]{KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_FORWARD_DEL}) {
                 tempTextHolder = el.getText();
                 final int length = tempTextHolder.length();
                 for (int count = 0; count < length; count++) {
@@ -395,10 +403,8 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
                 }
             }
         }
-
         return el.getText().isEmpty();
     }
-
     public static Elements getElements() {
         return elements;
     }
