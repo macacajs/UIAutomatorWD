@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.android.tools.build:gradle:2.3.2'
     }
 }
 
@@ -21,6 +21,7 @@ ext {
     supportLibVersion = "24.2.0"
     runnerVersion = "0.5"
     rulesVersion = "0.5"
-    espressoVersion = "2.2.2"
     uiautomatorVersion = "2.1.2"
+    nanohttpdVersion = "2.3.1"
+    fastjsonVersion = "1.2.31"
 }

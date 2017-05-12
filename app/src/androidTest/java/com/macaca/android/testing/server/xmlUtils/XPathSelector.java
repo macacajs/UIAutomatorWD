@@ -114,13 +114,6 @@ public class XPathSelector {
         TO_DOM_MAP.put(uiElement, element);
         FROM_DOM_MAP.put(element, uiElement);
 
-        /**
-         * Setting the Element's className field.
-         * Reason for setting className field in Element object explicitly,
-         * className property might contain special characters like '$' if it is a Inner class and
-         * just not possible to create Element object with special characters.
-         * But Appium should consider Inner classes i.e special characters should be included.
-         */
         setNodeLocalName(element, className);
 
         setAttribute(element, Attribute.INDEX, String.valueOf(uiElement.getIndex()));

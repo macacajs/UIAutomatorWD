@@ -40,6 +40,12 @@ public class Response {
         this.sessionId = sessionId;
     }
 
+    public Response(boolean value, String sessionId) {
+        this.status = 0;
+        this.value = value;
+        this.sessionId = sessionId;
+    }
+
     public int getStatus() {
         return status;
     }
