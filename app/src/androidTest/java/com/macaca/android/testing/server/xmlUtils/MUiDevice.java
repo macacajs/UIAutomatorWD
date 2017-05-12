@@ -16,6 +16,8 @@ import com.macaca.android.testing.server.common.Elements;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MUiDevice {
 
@@ -55,19 +57,8 @@ public class MUiDevice {
         return INSTANCE;
     }
 
-    /**
-     * Returns the first object to match the {@code selector} criteria.
-     */
-    public UiObject2 findObject(Object selector) throws Exception {
+    private UiObject2 doFindObject(Object selector, AccessibilityNodeInfo node) throws Exception {
 
-        AccessibilityNodeInfo node;
-        uiDevice.waitForIdle();
-        node = ((NodeInfoList) selector).getNodeList().size() > 0 ? ((NodeInfoList) selector).getNodeList().get(0) : null;
-        selector = By.clazz(node.getClassName().toString());
-
-        if (node == null) {
-            return null;
-        }
         Class uiObject2 = Class.forName("android.support.test.uiautomator.UiObject2");
         Constructor cons = uiObject2.getDeclaredConstructors()[0];
         cons.setAccessible(true);
@@ -86,5 +77,41 @@ public class MUiDevice {
             }
             SystemClock.sleep(Math.min(200, remainingMillis));
         }
+    }
+
+
+    /**
+     * Returns the first object to match the {@code selector} criteria.
+     */
+    public UiObject2 findObject(Object selector) throws Exception {
+        AccessibilityNodeInfo node;
+        uiDevice.waitForIdle();
+        node = ((NodeInfoList) selector).getNodeList().size() > 0 ? ((NodeInfoList) selector).getNodeList().get(1) : null;
+        selector = By.clazz(node.getClassName().toString());
+        if (node == null) {
+            return null;
+        }
+        return doFindObject(selector, node);
+    }
+
+    public List<UiObject2> findObjects(Object selector) throws Exception {
+        uiDevice.waitForIdle();
+        ArrayList<AccessibilityNodeInfo> accessibilityNodeInfos = ((NodeInfoList) selector).getNodeList();
+        int size = accessibilityNodeInfos.size();
+        List<UiObject2> list = new ArrayList<UiObject2>();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                AccessibilityNodeInfo node = accessibilityNodeInfos.get(i);
+                if (node == null) {
+                    continue;
+                }
+                selector = By.clazz(node.getClassName().toString());
+                UiObject2 uiObject2 = doFindObject(selector, node);
+                list.add(uiObject2);
+            }
+        } else {
+            return null;
+        }
+        return list;
     }
 }

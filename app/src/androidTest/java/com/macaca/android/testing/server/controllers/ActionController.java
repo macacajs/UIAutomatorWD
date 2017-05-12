@@ -210,7 +210,9 @@ public class ActionController extends RouterNanoHTTPD.DefaultHandler {
             Element el = elements.getElement(elementId);
             return el.drag(toX, toY, steps);
         } else {
-            return mDevice.drag(fromX, fromY, toX, toY, steps);
+            boolean res = mDevice.drag(fromX, fromY, toX, toY, steps);
+            Thread.sleep(steps * 100);
+            return res;
         }
     }
 
