@@ -14,6 +14,7 @@ import com.macaca.android.testing.server.xmlUtils.NodeInfoList;
 import com.macaca.android.testing.server.xmlUtils.UiAutomatorBridge;
 import com.macaca.android.testing.server.xmlUtils.XPathSelector;
 import com.macaca.android.testing.server.xmlUtils.MUiDevice;
+import com.macaca.android.testing.server.charsetUtils.CharsetProvider;
 
 import android.graphics.Rect;
 import android.support.test.uiautomator.By;
@@ -26,6 +27,7 @@ import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
 
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -143,6 +145,8 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
             public NanoHTTPD.Response get(RouterNanoHTTPD.UriResource uriResource, Map<String, String> urlParams, NanoHTTPD.IHTTPSession session) {
                 String sessionId = urlParams.get("sessionId");
                 String elementId = urlParams.get("elementId");
+                Charset UTF7 = new CharsetProvider().charsetForName("X-MODIFIED-UTF-7");
+                Charset ASCII = Charset.forName("US-ASCII");
                 Map<String, String> body = new HashMap<String, String>();
                 JSONObject result = null;
                 try {
@@ -152,8 +156,10 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
                     JSONArray values = (JSONArray)jsonObj.get("value");
                     for (Iterator iterator = values.iterator(); iterator.hasNext();) {
                         String value = (String) iterator.next();
+                        byte[] encoded = (value).getBytes(UTF7);
+                        String str = new String(encoded, ASCII);
                         Element element = getElements().getElement(elementId);
-                        element.setText(value);
+                        element.setText(str);
                     }
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
                 } catch (final UiObjectNotFoundException e) {
