@@ -97,19 +97,25 @@ public class AlertController extends RouterNanoHTTPD.DefaultHandler {
         }
 
         List<UiObject2> alertButtons = mDevice.findObjects(By.clazz("android.widget.Button").clickable(true).checkable(false));
+        if (alertButtons.size() == 0) {
+            return null;
+        }
         UiObject2 alertButton = alertButtons.get(buttonIndex);
 
-        if (alertButton == null) {
-            throw new UiObjectNotFoundException("Alert Dialog does not exist.");
-        }
         return alertButton;
     }
 
     private static void acceptAlert() throws Exception {
-        getAlertButton("accept").click();
+        UiObject2 alertButton = getAlertButton("accept");
+        if (alertButton != null) {
+            alertButton.click();
+        }
     }
 
     private static void dismissAlert() throws Exception {
-        getAlertButton("dismiss").click();
+        UiObject2 alertButton = getAlertButton("dismiss");
+        if (alertButton != null) {
+            alertButton.click();
+        }
     }
 }
