@@ -38,8 +38,8 @@ public class KeysController extends RouterNanoHTTPD.DefaultHandler {
                     JSONObject jsonObj = JSON.parseObject(postData);
                     JSONArray keycodes = (JSONArray)jsonObj.get("value");
                     for (Iterator iterator = keycodes.iterator(); iterator.hasNext();) {
-                        String keycode = (String) iterator.next();
-                        mDevice.pressKeyCode(Integer.parseInt(keycode));
+                        int keycode = (int) iterator.next();
+                        mDevice.pressKeyCode(keycode);
                     }
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
                 } catch (Exception e) {
