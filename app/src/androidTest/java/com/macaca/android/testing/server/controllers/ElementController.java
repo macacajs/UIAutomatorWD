@@ -149,6 +149,7 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
             public NanoHTTPD.Response get(RouterNanoHTTPD.UriResource uriResource, Map<String, String> urlParams, NanoHTTPD.IHTTPSession session) {
                 String sessionId = urlParams.get("sessionId");
                 String elementId = urlParams.get("elementId");
+                String preText = getElements().getText(elementId);
                 Map<String, String> body = new HashMap<String, String>();
                 JSONObject result = null;
                 try {
@@ -159,7 +160,14 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
                     for (Iterator iterator = values.iterator(); iterator.hasNext(); ) {
                         String value = (String) iterator.next();
                         Element element = getElements().getElement(elementId);
-                        element.setText(value);
+                        String text = "";
+                        if (preText == null) {
+                            text = value;
+                        } else {
+                            text = preText + value;
+                        }
+                        element.setText(text);
+                        getElements().setText(elementId, text);
                     }
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
                 } catch (final UiObjectNotFoundException e) {
@@ -194,6 +202,7 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
                 Element el = Elements.getGlobal().getElement(elementId);
                 JSONObject result = null;
                 try {
+                    Elements.getGlobal().clearValues();
                     el.clearText();
                     if (el.getText().isEmpty()) {
                         return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());

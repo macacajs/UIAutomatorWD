@@ -13,10 +13,12 @@ public class Elements {
 
 	private static Elements global;
 	private Hashtable<String, Element> elems;
+	private Hashtable<String, String> values;
 	private UiDevice mDevice;
 
 	public Elements() {
 		elems = new Hashtable<String, Element>();
+		values = new Hashtable<String, String>();
 		mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 	}
 
@@ -30,6 +32,7 @@ public class Elements {
 	public Element addElement(UiObject2 element) {
 		Element elem = new Element("1", element);
 		getElems().put("1", elem);
+		clearValues();
 		return elem;
 	}
 
@@ -41,12 +44,24 @@ public class Elements {
 			getElems().put(index + "", elem);
 			elems.add(elem);
 		}
-
+		clearValues();
 		return elems;
 	}
 
 	public Element getElement(String key) {
 		return getElems().get(key);
+	}
+
+	public String getText(String key) {
+		return values.get(key);
+	}
+
+	public void setText(String key, String value) {
+		values.put(key, value);
+	}
+
+	public void clearValues() {
+		values.clear();
 	}
 
 	public Element getElement(BySelector sel) throws Exception {
