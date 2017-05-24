@@ -86,7 +86,7 @@ public class MUiDevice {
     public UiObject2 findObject(Object selector) throws Exception {
         AccessibilityNodeInfo node;
         uiDevice.waitForIdle();
-        node = ((NodeInfoList) selector).getNodeList().size() > 0 ? ((NodeInfoList) selector).getNodeList().get(1) : null;
+        node = ((NodeInfoList) selector).getNodeList().size() > 0 ? ((NodeInfoList) selector).getNodeList().get(0) : null;
         selector = By.clazz(node.getClassName().toString());
         if (node == null) {
             return null;
