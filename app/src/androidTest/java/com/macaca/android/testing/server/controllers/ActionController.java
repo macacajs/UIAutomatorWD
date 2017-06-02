@@ -7,6 +7,7 @@ import android.support.test.uiautomator.UiDevice;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.macaca.android.testing.server.Utils;
 import com.macaca.android.testing.server.common.Element;
 import com.macaca.android.testing.server.common.Elements;
 import com.macaca.android.testing.server.models.Response;
@@ -85,6 +86,7 @@ public class ActionController extends RouterNanoHTTPD.DefaultHandler {
                     }
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(response, sessionId).toString());
                 } catch (final Exception e) {
+                    Utils.print(e.getMessage());
                     e.printStackTrace();
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.UnknownError, sessionId).toString());
                 }
@@ -200,17 +202,17 @@ public class ActionController extends RouterNanoHTTPD.DefaultHandler {
 
     private static boolean drag(JSONObject args) throws Exception {
         String elementId = args.getString("element");
-        int fromX = args.getInteger("fromX");
-        int fromY = args.getInteger("fromY");
-        int toX = args.getInteger("toX");
-        int toY = args.getInteger("toY");
+        Double fromX = args.getDouble("fromX");
+        Double fromY = args.getDouble("fromY");
+        Double toX = args.getDouble("toX");
+        Double toY = args.getDouble("toY");
         double duration = args.getDoubleValue("duration");
         int steps = (int) Math.round(duration * 40);
         if (elementId != null) {
             Element el = elements.getElement(elementId);
-            return el.drag(toX, toY, steps);
+            return el.drag(toX.intValue(), toY.intValue(), steps);
         } else {
-            boolean res = mDevice.drag(fromX, fromY, toX, toY, steps);
+            boolean res = mDevice.drag(fromX.intValue(), fromY.intValue(), toX.intValue(), toY.intValue(), steps);
             Thread.sleep(steps * 100);
             return res;
         }
@@ -239,15 +241,15 @@ public class ActionController extends RouterNanoHTTPD.DefaultHandler {
                     Point p = new Point(elRect.centerX(), elRect.centerY());
                     allPoint[0] = p;
                 } else {
-                    int fromX = action.getInteger("fromX");
-                    int fromY = action.getInteger("fromY");
-                    Point p = new Point(fromX, fromY);
+                    Double fromX = action.getDouble("fromX");
+                    Double fromY = action.getDouble("fromY");
+                    Point p = new Point(fromX.intValue(), fromY.intValue());
                     allPoint[0] = p;
                 }
             }
-            int toX = action.getInteger("toX");
-            int toY = action.getInteger("toY");
-            Point p = new Point(toX, toY);
+            Double toX = action.getDouble("toX");
+            Double toY = action.getDouble("toY");
+            Point p = new Point(toX.intValue(), toY.intValue());
             allPoint[i + 1] = p;
         }
         return mDevice.swipe(allPoint, steps);
