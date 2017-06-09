@@ -17,9 +17,10 @@ public class UIAutomatorWD {
         Bundle args = InstrumentationRegistry.getArguments();
 
         int port = 9001;
-        if (args.get("port") != null) {
-            port = Integer.parseInt((String)args.get("port"));
+        if (args.containsKey("port")) {
+            port = Integer.parseInt(args.getString("port"));
         }
+
         UIAutomatorWDServer server = UIAutomatorWDServer.getInstance(port);
         Utils.print("UIAutomatorWD->" + "http://localhost:" + server.getListeningPort() + "<-UIAutomatorWD");
         while (true) {
