@@ -193,6 +193,9 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
                 JSONObject result = null;
                 try {
                     el.clearText();
+                    if (el.getText() == null) {
+                        return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
+                    }
                     if (el.getText().isEmpty()) {
                         return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
                     }
