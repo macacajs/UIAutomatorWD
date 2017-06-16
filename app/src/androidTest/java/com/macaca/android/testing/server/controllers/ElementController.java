@@ -332,7 +332,10 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
                 selector = By.clazz(text);
                 break;
             case "NAME":
-                selector = By.desc(text) == null ? By.text(text): By.desc(text);
+                selector = By.desc(text);
+                if(selector == null || elements.getmDevice().findObject(selector) == null){
+                    selector = By.text(text);
+                }
                 break;
             case "ID":
                 selector = By.res(text);
