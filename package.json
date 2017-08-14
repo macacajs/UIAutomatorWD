@@ -24,7 +24,7 @@
     "istanbul": "*",
     "jshint": "*",
     "mocha": "*",
-    "pre-commit": "1.1.1",
+    "pre-commit": "*",
     "should": "^8.0.2"
   },
   "scripts": {
