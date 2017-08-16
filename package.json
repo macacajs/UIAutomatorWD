@@ -1,6 +1,6 @@
 {
   "name": "uiautomatorwd",
-  "version": "1.0.41",
+  "version": "1.0.42",
   "description": "Node.js wrapper for UIAutomator2",
   "keywords": [
     "uiautomator",
