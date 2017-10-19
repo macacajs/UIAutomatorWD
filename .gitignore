@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 npm-debug.log
-*.sw*
 .idea/*
 Thumbs.db
 coverage/
@@ -11,7 +10,9 @@ bin/
 gen/
 app/build
 .gradle/
-local.properties
 import-summary.txt
+local.properties
+gradle.properties
 *.iml
 *.un~
+*.sw*

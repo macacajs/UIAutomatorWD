@@ -24,6 +24,10 @@ $ npm i uiautomatorwd --save
 
 [uiautomator source code](https://android.googlesource.com/platform/frameworks/testing/+/master/uiautomator/)
 
+## Development
+
+- [CONTRIBUTING.md](./CONTRIBUTING.md)
+
 ## License
 
 The MIT License (MIT)
