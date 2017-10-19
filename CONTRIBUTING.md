@@ -12,13 +12,6 @@ $ npm link path/to/UIAutomatorWD
 
 ## Run with Android Studio
 
-## mavenMirrorUrl Setting
-
-``` bash
-# under the root dir
-$ echo mavenMirrorUrl= > gradle.properties
-```
-
 ## Restful Sample
 
 ``` bash

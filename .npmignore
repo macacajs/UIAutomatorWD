@@ -18,6 +18,5 @@ app/build
 import-summary.txt
 *.iml
 local.properties
-gradle.properties
 *.sw*
 *.un~
