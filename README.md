@@ -18,7 +18,7 @@ Node.js wrapper for UIAutomator.
 
 ## Installment
 
-``` bash
+```bash
 $ npm i uiautomatorwd --save
 ```
 
