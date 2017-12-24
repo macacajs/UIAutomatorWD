@@ -27,7 +27,7 @@
   },
   "scripts": {
     "test": "istanbul cover `npm bin`/_mocha",
-    "lint": "eslint . lib test",
+    "lint": "eslint --fix lib test",
     "ci": "npm run lint && npm run test",
     "install": "node ./scripts/build.js"
   },
