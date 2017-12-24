@@ -1,21 +1,15 @@
 'use strict';
 
-require('should');
 const _ = require('xutil');
-//const ADB = require('macaca-adb');
+const assert = require('assert');
 
 const UIAutomator = require('..');
 
 describe('uiautomator', function() {
 
-  var client = new UIAutomator();
-
   it('should be ok', function() {
-    client.should.be.ok();
 
-    if (!_.isExistedFile(UIAutomator.UIAUTOMATORWD.APK_BUILD_PATH)) {
-      throw 'apk file build failed';
-    }
+    assert(_.isExistedFile(UIAutomator.UIAUTOMATORWD.APK_BUILD_PATH), true);
     /*
     var adb = new ADB();
     var devices = yield ADB.getDevices();
