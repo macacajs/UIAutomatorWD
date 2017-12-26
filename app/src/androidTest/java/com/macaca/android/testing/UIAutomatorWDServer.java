@@ -29,6 +29,9 @@ public class UIAutomatorWDServer extends RouterNanoHTTPD {
         //addRoute("/wd/hub/sessions", Methods.GET, SessionController.getSessions);
         //addRoute("/wd/hub/session/:sessionId", Methods.DELETE, SessionController.delSession);
 
+        //Skip Permission
+        addRoute( "/wd/hub/permission/skip", Methods.POST, PermissionController.skipPermission);
+
         //Window Router
         addRoute(sessionRoutePrefix + "/window_handle", Methods.GET, WindowController.getWindow);
         addRoute(sessionRoutePrefix + "/window_handles", Methods.GET, WindowController.getWindows);
