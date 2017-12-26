@@ -4,8 +4,14 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiSelector;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.macaca.android.testing.server.Utils;
+import com.macaca.android.testing.server.common.Elements;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,9 +29,37 @@ public class UIAutomatorWD {
 
         UIAutomatorWDServer server = UIAutomatorWDServer.getInstance(port);
         Utils.print("UIAutomatorWD->" + "http://localhost:" + server.getListeningPort() + "<-UIAutomatorWD");
+
+        if (args.containsKey("permissionPattern")) {
+            JSONArray permissionPatterns = JSON.parseArray(args.getString("permissionPattern"));
+            skipPermission(permissionPatterns, 5);
+        }
+
         while (true) {
             SystemClock.sleep(1000);
         }
     }
 
+    public void skipPermission(JSONArray permissionPatterns, int scanningCount) {
+        UiDevice mDevice = Elements.getGlobal().getmDevice();
+        try {
+            for (int i = 0; i < scanningCount; i++) {
+                inner:
+                for (int j = 0; j < permissionPatterns.size(); j++) {
+                    String text = permissionPatterns.getString(j);
+                    System.out.println("we are here testing : " + text);
+                    UiObject object = mDevice.findObject(new UiSelector().text(text));
+                    if (object.exists()) {
+                        object.click();
+                        break inner;
+                    }
+                }
+
+                Thread.sleep(3000);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause().toString());
+        }
+    }
 }
