@@ -42,12 +42,18 @@ public class UIAutomatorWD {
 
     public void skipPermission(JSONArray permissionPatterns, int scanningCount) {
         UiDevice mDevice = Elements.getGlobal().getmDevice();
+
+        // if permission list is empty, avoid execution
+        if (permissionPatterns.size() == 0) {
+            return;
+        }
+
+        // regular check for permission scanning
         try {
             for (int i = 0; i < scanningCount; i++) {
                 inner:
                 for (int j = 0; j < permissionPatterns.size(); j++) {
                     String text = permissionPatterns.getString(j);
-                    System.out.println("we are here testing : " + text);
                     UiObject object = mDevice.findObject(new UiSelector().text(text));
                     if (object.exists()) {
                         object.click();
