@@ -32,7 +32,7 @@ public class UIAutomatorWD {
 
         if (args.containsKey("permissionPattern")) {
             JSONArray permissionPatterns = JSON.parseArray(args.getString("permissionPattern"));
-            skipPermission(permissionPatterns, 5);
+            skipPermission(permissionPatterns, 15);
         }
 
         while (true) {
