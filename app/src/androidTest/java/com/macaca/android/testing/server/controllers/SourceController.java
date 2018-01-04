@@ -35,11 +35,22 @@ public class SourceController extends RouterNanoHTTPD.DefaultHandler {
                 String sessionId = urlParams.get("sessionId");
                 final File dump = new File(Environment.getDataDirectory() + File.separator + "local" + File.separator + "tmp" + File.separator + dumpFileName);
                 try {
+                    if (!dump.delete()) {
+                        System.out.println("--> remove file failed<--");
+                    }
+
                     mDevice.dumpWindowHierarchy(dump);
-                } catch (IOException e) {
-                    System.out.print(e);
+
+                    if (!dump.setReadable(true,false) && !dump.setWritable(true,false)) {
+                        System.out.println("--> permission update failure <--");
+                    } else {
+                        System.out.println("--> permission update success <--");
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("--> dump exception <--");
+                    e.printStackTrace();
                 }
-                dump.setReadable(true);
                 String res = "";
                 try {
                     FileInputStream fin = new FileInputStream(dump.getAbsolutePath());
@@ -49,6 +60,7 @@ public class SourceController extends RouterNanoHTTPD.DefaultHandler {
                     res = EncodingUtils.getString(buffer, "UTF-8");
                     fin.close();
                 } catch (Exception e) {
+                    System.out.println("--> file access exception <--");
                     e.printStackTrace();
                 }
                 return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(res, sessionId).toString());

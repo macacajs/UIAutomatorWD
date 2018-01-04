@@ -11,6 +11,7 @@ import com.macaca.android.testing.server.common.Element;
 import com.macaca.android.testing.server.common.Elements;
 import com.macaca.android.testing.server.xmlUtils.InteractionController;
 import com.macaca.android.testing.server.xmlUtils.NodeInfoList;
+import com.macaca.android.testing.server.xmlUtils.ReflectionUtils;
 import com.macaca.android.testing.server.xmlUtils.UiAutomatorBridge;
 import com.macaca.android.testing.server.xmlUtils.XPathSelector;
 import com.macaca.android.testing.server.xmlUtils.MUiDevice;
@@ -18,13 +19,17 @@ import com.macaca.android.testing.server.xmlUtils.MUiDevice;
 import android.graphics.Rect;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
+import android.support.test.uiautomator.InstrumentationUiAutomatorBridge;
+import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.view.KeyEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -149,22 +154,36 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
             public NanoHTTPD.Response get(RouterNanoHTTPD.UriResource uriResource, Map<String, String> urlParams, NanoHTTPD.IHTTPSession session) {
                 String sessionId = urlParams.get("sessionId");
                 String elementId = urlParams.get("elementId");
-                Map<String, String> body = new HashMap<String, String>();
+                Map<String, String> body = new HashMap<>();
                 JSONObject result = null;
                 try {
+
+                    /**
+                     * Code in UIObject2 line 601, currentText cause npe:
+                     * if (!node.performAction(AccessibilityNodeInfo.ACTION_SET_SELECTION, args) &&
+                     * currentText.length() > 0) {
+                     * */
+                    Element element = getElements().getElement(elementId);
+                    AccessibilityNodeInfo info = (AccessibilityNodeInfo)ReflectionUtils.getField(UiObject2.class,"mCachedNode",element.element);
+                    if (info != null && info.getText() == null) {
+                        ReflectionUtils.setField(AccessibilityNodeInfo.class,"mText", info, "");
+                    }
+
+                    // Conduct regular text set
                     session.parseBody(body);
                     String postData = body.get("postData");
                     JSONObject jsonObj = JSON.parseObject(postData);
                     JSONArray values = (JSONArray) jsonObj.get("value");
                     for (Iterator iterator = values.iterator(); iterator.hasNext(); ) {
                         String value = (String) iterator.next();
-                        Element element = getElements().getElement(elementId);
                         element.setText(value);
                     }
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
                 } catch (final UiObjectNotFoundException e) {
+                    e.printStackTrace();
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.NoSuchElement, sessionId).toString());
                 } catch (final Exception e) {
+                    e.printStackTrace();
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.UnknownError, sessionId).toString());
                 }
             }

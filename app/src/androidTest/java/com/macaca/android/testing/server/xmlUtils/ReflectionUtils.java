@@ -35,6 +35,12 @@ public class ReflectionUtils {
         return getField(a, field, object);
     }
 
+    public static void setField(final Class clazz, final String fieldName, final Object object, final Object value) throws Exception {
+        final Field field = clazz.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(object, value);
+    }
+
     public static Object invoke(final Method method, final Object object, final Object... parameters) throws Exception {
         return method.invoke(object, parameters);
     }
