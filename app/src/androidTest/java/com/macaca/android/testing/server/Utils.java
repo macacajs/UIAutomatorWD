@@ -9,9 +9,9 @@ import android.support.test.InstrumentationRegistry;
  */
 
 public class Utils {
-    public static void print(String str) {
+    public static void print(String string) {
         Bundle b = new Bundle();
-        b.putString(Instrumentation.REPORT_KEY_STREAMRESULT, "\n" + str);
+        b.putString(Instrumentation.REPORT_KEY_STREAMRESULT, "\n" + string);
         InstrumentationRegistry.getInstrumentation().sendStatus(0, b);
     }
 }
