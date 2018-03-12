@@ -362,6 +362,12 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
             case "ID":
                 selector = By.res(text);
                 break;
+            case "TEXT_CONTAINS":
+                selector = By.textContains(text);
+                break;
+            case "DESC_CONTAINS":
+                selector = By.descContains(text);
+                break;
         }
         return selector;
     }
