@@ -21,6 +21,7 @@
   "devDependencies": {
     "eslint": "^4.13.1",
     "eslint-plugin-mocha": "^4.11.0",
+    "git-contributor": "^1.0.2",
     "istanbul": "*",
     "mocha": "*",
     "pre-commit": "*"
@@ -29,7 +30,8 @@
     "test": "istanbul cover `npm bin`/_mocha",
     "lint": "eslint --fix lib test",
     "ci": "npm run lint && npm run test",
-    "install": "node ./scripts/build.js"
+    "install": "node ./scripts/build.js",
+    "contributor": "git-contributor"
   },
   "pre-commit": [
     "lint"
