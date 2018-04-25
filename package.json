@@ -21,7 +21,7 @@
   "devDependencies": {
     "eslint": "^4.13.1",
     "eslint-plugin-mocha": "^4.11.0",
-    "git-contributor": "^1.0.7",
+    "git-contributor": "^1.0.8",
     "istanbul": "*",
     "mocha": "*",
     "pre-commit": "*"
