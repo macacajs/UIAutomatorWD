@@ -14,8 +14,10 @@ public class Elements {
 	private static Elements global;
 	private Hashtable<String, Element> elems;
 	private UiDevice mDevice;
+	private Integer counter;
 
 	public Elements() {
+		counter = 0;
 		elems = new Hashtable<String, Element>();
 		mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 	}
@@ -28,17 +30,19 @@ public class Elements {
 	}
 
 	public Element addElement(UiObject2 element) {
-		Element elem = new Element("1", element);
-		getElems().put("1", elem);
+		counter++;
+		final String key = counter.toString();
+		Element elem = new Element(key, element);
+		getElems().put(key, elem);
 		return elem;
 	}
 
 	public List<Element> addElements(List<UiObject2> elements) {
 		List<Element> elems = new ArrayList<Element>();
 		for(int i = 0; i < elements.size(); i++) {
-			int index = i + 1;
-			Element elem = new Element(index + "", elements.get(i));
-			getElems().put(index + "", elem);
+			counter++;
+			Element elem = new Element(counter + "", elements.get(i));
+			getElems().put(counter + "", elem);
 			elems.add(elem);
 		}
 
