@@ -38,12 +38,11 @@ public class Elements {
 	}
 
 	public List<Element> addElements(List<UiObject2> elements) {
-		counter++;
 		List<Element> elems = new ArrayList<Element>();
-		for(int i = counter; i < elements.size()+counter; i++) {
-			int index = i;
-			Element elem = new Element(index + "", elements.get(i));
-			getElems().put(index + "", elem);
+		for(int i = 0; i < elements.size(); i++) {
+			counter++;
+			Element elem = new Element(counter + "", elements.get(i));
+			getElems().put(counter + "", elem);
 			elems.add(elem);
 		}
 
