@@ -73,7 +73,7 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
                     }
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
                 } catch (final Exception e) {
-                    return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.UnknownError, sessionId).toString());
+                    return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.NoSuchElement, sessionId).toString());
                 }
 
             }
@@ -111,7 +111,7 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
                     return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
 
                 } catch (Exception e) {
-                    return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.UnknownError, sessionId).toString());
+                    return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.NoSuchElement, sessionId).toString());
                 }
             }
         };
@@ -143,7 +143,7 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
                         }
                     }
                 } catch (Exception e) {
-                    return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(Status.UnknownError, sessionId).toString());
+                    return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(new JSONArray(), sessionId).toString());
                 }
                 return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), new Response(result, sessionId).toString());
             }
@@ -436,3 +436,4 @@ public class ElementController extends RouterNanoHTTPD.DefaultHandler {
         return elements;
     }
 }
+
