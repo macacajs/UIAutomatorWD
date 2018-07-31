@@ -561,6 +561,17 @@ public class RouterNanoHTTPD extends NanoHTTPD {
     @Override
     public Response serve(IHTTPSession session) {
         // Try to find match
-        return router.process(session);
+        Response r = router.process(session);
+
+        //clear remain body
+        try{
+            Map<String, String> remainBody = new HashMap<String, String>();
+            session.parseBody(remainBody);
+        }
+        catch (Exception e){
+            String error = "Error: " + e.getClass().getName() + " : " + e.getMessage();
+            LOG.log(Level.SEVERE, error, e);
+        }
+        return r;
     }
 }
