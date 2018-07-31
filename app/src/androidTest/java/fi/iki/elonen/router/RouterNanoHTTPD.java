@@ -565,7 +565,7 @@ public class RouterNanoHTTPD extends NanoHTTPD {
 
         //clear remain body
         try{
-            Map<String, String> remainBody = new HashMap<String, String>();
+            Map<String, String> remainBody = new HashMap<>();
             session.parseBody(remainBody);
         }
         catch (Exception e){
