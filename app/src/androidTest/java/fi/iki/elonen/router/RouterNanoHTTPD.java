@@ -560,13 +560,16 @@ public class RouterNanoHTTPD extends NanoHTTPD {
 
     @Override
     public Response serve(IHTTPSession session) {
+        long bodySize = ((HTTPSession)session).getBodySize();
+        session.getInputStream().mark(HTTPSession.BUFSIZE);
+        
         // Try to find match
         Response r = router.process(session);
-
+        
         //clear remain body
         try{
-            Map<String, String> remainBody = new HashMap<>();
-            session.parseBody(remainBody);
+            session.getInputStream().reset();
+            session.getInputStream().skip(bodySize);
         }
         catch (Exception e){
             String error = "Error: " + e.getClass().getName() + " : " + e.getMessage();
