@@ -230,7 +230,7 @@ public class ActionController extends RouterNanoHTTPD.DefaultHandler {
             JSONObject action = actions.getJSONObject(i);
             if (i == 0) {
                 String elementId = action.getString("element");
-                steps = action.getInteger("steps");
+                steps = action.getIntValue("steps");
                 if (steps == 0) {
                     double duration = action.getDoubleValue("duration");
                     steps = (int) Math.round(duration * 40);
