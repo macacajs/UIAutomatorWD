@@ -5,6 +5,7 @@ import com.macaca.android.testing.server.models.Methods;
 
 import java.io.IOException;
 
+import com.macaca.android.testing.server.xmlUtils.ReflectionUtils;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
 
@@ -105,5 +106,16 @@ public class UIAutomatorWDServer extends RouterNanoHTTPD {
             }
         }
         return singleton;
+    }
+
+    @Override
+    public Response serve(IHTTPSession session) {
+        try {
+            System.out.println("Try to clean up the Accessibility Node cache.");
+            ReflectionUtils.clearAccessibilityCache();
+        } catch (Exception e) {
+            System.err.println("Failed to clear Accessibility Node cache.");
+        }
+        return super.serve(session);
     }
 }

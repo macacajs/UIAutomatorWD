@@ -20,6 +20,28 @@ import java.lang.reflect.Method;
 
 public class ReflectionUtils {
 
+    /**
+     * Clears the in-process Accessibility cache, removing any stale references.
+     * Because the AccessibilityInteractionClient singleton stores copies of
+     * AccessibilityNodeInfo instances, calls to public APIs such as `recycle` do
+     * not guarantee cached references get updated. See the
+     * android.view.accessibility AIC and ANI source code for more information.
+     * https://github.com/appium/appium/issues/4200
+     */
+    public static boolean clearAccessibilityCache() throws Exception {
+        boolean success;
+
+        final Class c = Class.forName("android.view.accessibility.AccessibilityInteractionClient");
+        final Method getInstance = ReflectionUtils.method(c, "getInstance");
+        final Object instance = getInstance.invoke(null);
+        final Method clearCache = ReflectionUtils.method(instance.getClass(), "clearCache");
+        clearCache.invoke(instance);
+        success = true;
+
+        return success;
+    }
+
+
     public static Class getClass(final String name) throws Exception {
         return Class.forName(name);
     }
