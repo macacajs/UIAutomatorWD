@@ -11,6 +11,7 @@ android:
     - platform-tools
     - extra-android-m2repository
     - extra-google-android-support
+    - android-26
     - android-28
 before_script:
     - wget http://services.gradle.org/distributions/gradle-5.2-bin.zip

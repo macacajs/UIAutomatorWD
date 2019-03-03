@@ -15,3 +15,4 @@ local.properties
 *.iml
 *.un~
 *.sw*
+.nyc_output/

@@ -24,7 +24,7 @@ allprojects {
 }
 
 ext {
-    buildToolsVersion = "25.0.2"
+    buildToolsVersion = "28.0.3"
     supportLibVersion = "24.2.0"
     runnerVersion = "0.5"
     rulesVersion = "0.5"
