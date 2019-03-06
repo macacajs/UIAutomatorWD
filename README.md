@@ -42,6 +42,10 @@ $ npm i uiautomatorwd --save
 
 - [CONTRIBUTING.md](./CONTRIBUTING.md)
 
+## Report Issues
+
+Please report issues at the [macaca main repo](https://github.com/alibaba/macaca/issues/new), following the issue format.
+
 ## License
 
 The MIT License (MIT)
