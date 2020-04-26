@@ -18,7 +18,6 @@ android {
     }
     productFlavors {
     }
-    buildToolsVersion '25.0.2'
     testOptions {
         unitTests.all {
             testLogging {
@@ -42,8 +41,8 @@ android {
 }
 
 dependencies {
-    androidTestCompile 'com.android.support.test:runner:' + rootProject.runnerVersion;
-    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:' + rootProject.uiautomatorVersion;
-    compile 'org.nanohttpd:nanohttpd:' + rootProject.nanohttpdVersion;
-    compile 'com.alibaba:fastjson:' + rootProject.fastjsonVersion;
+    androidTestImplementation 'com.android.support.test:runner:' + rootProject.runnerVersion
+    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:' + rootProject.uiautomatorVersion
+    implementation 'org.nanohttpd:nanohttpd:' + rootProject.nanohttpdVersion
+    implementation 'com.alibaba:fastjson:' + rootProject.fastjsonVersion
 }
