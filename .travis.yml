@@ -3,7 +3,8 @@ sudo: required
 os:
   - linux
 jdk:
-  - oraclejdk8
+  - openjdk8
+  - openjdk11
 android:
   components:
     - tools
@@ -14,13 +15,13 @@ android:
     - android-26
     - android-28
 before_script:
-    - wget http://services.gradle.org/distributions/gradle-5.2-bin.zip
+  - wget https://services.gradle.org/distributions/gradle-5.6.4-all.zip
     - unzip gradle-5.2-bin.zip > /dev/null
-    - export GRADLE_HOME=$PWD/gradle-5.2
+  - export GRADLE_HOME=$PWD/gradle-5.6.4
     - export PATH=$GRADLE_HOME/bin:$PATH
     - . $HOME/.nvm/nvm.sh
-    - nvm install 8
-    - nvm use 8
+  - nvm install 10
+  - nvm use 10
 script:
   - npm i
   - npm run lint
