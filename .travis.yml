@@ -16,10 +16,10 @@ android:
     - android-28
 before_script:
   - wget https://services.gradle.org/distributions/gradle-5.6.4-all.zip
-    - unzip gradle-5.2-bin.zip > /dev/null
+  - unzip gradle-5.2-bin.zip > /dev/null
   - export GRADLE_HOME=$PWD/gradle-5.6.4
-    - export PATH=$GRADLE_HOME/bin:$PATH
-    - . $HOME/.nvm/nvm.sh
+  - export PATH=$GRADLE_HOME/bin:$PATH
+  - . $HOME/.nvm/nvm.sh
   - nvm install 10
   - nvm use 10
 script:
