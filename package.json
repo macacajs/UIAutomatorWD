@@ -1,6 +1,6 @@
 {
   "name": "uiautomatorwd",
-  "version": "1.2.0",
+  "version": "1.2.3",
   "description": "Node.js wrapper for UIAutomator2",
   "keywords": [
     "uiautomator",
@@ -12,7 +12,7 @@
     "url": "https:github.com/macacajs/uiautomatorwd.git"
   },
   "dependencies": {
-    "gradle": "^1.0.1",
+    "gradle": "1",
     "macaca-adb": "~1.0.2",
     "request": "^2.81.0",
     "xlogger": "~1.0.0",
