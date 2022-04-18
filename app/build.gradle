@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    buildToolsVersion rootProject.buildToolsVersion
     defaultConfig {
         compileSdkVersion 26
         minSdkVersion 18
@@ -33,11 +32,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    lintOptions {
-        abortOnError false
-    }
 
     useLibrary 'org.apache.http.legacy'
+    lint {
+        abortOnError false
+    }
 }
 
 dependencies {
